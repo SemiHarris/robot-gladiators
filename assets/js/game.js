@@ -11,7 +11,7 @@ var getPlayerName = function() {
 
 
 var playerInfo = {
-  name: getPlayerName(),
+  name: getPlayerName( ),
   health: 100,
   attack: 10,
   money: 10,
@@ -66,34 +66,39 @@ var enemyInfo = [
   }
 ];
 
-var fight = function(enemy) {
+var fightOfSkip = function() {
 
-  while(enemy.health > 0 && playerInfo.health > 0) {
-    
     var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
+    promptFight = promptFight.toLowerCase();
+
+    if (promptFight === "" || promptFight === null){
+      window.alert("You need to provide a valid answer! Please try again. ");
+      return fightOfSkip();
+    }
     
     if (promptFight === "skip" || promptFight === "SKIP") {
-      // confirm player wants to skip
+     
       var confirmSkip = window.confirm("Are you sure you'd like to quit?");
   
-      // if yes (true), leave fight
       if (confirmSkip) {
         window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
-        // subtract money from playerMoney for skipping
+       
         playerInfo.money = Math.max(0, playerInfo.money - 10);
-        console.log("playerMoney", playerInfo.money)
-        break
-      }
-      // if no (false), ask question again by running fight() again
-      else {
-        fight();
-      }
-      // if player did not chose 1 or 2 in prompt
-    }
+        console.log("playerMoney", playerInfo.money);
 
-// if player choses to fight, then fight
-if (promptFight === "fight" || promptFight === "FIGHT") {
-    // remove enemy's health by subtracting the amount set in the playerAttack variable
+        return true;
+      }
+    }
+  }
+
+var fight = function(enemy) {
+
+while(enemy.health > 0 && playerInfo.health > 0) {
+
+
+if (fightOfSkip()) {
+  break;
+}
     var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
     enemy.health = Math.max(0, enemy.health - damage);
     console.log(
@@ -122,13 +127,7 @@ if (promptFight === "fight" || promptFight === "FIGHT") {
     } else {
       window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
     }
-    // if player choses to skip
-  } 
-   else {
-    window.alert("You need to pick a valid option. Try again!");
-  } 
   }
-
 };
 
 var startGame = function() {
